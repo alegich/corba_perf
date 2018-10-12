@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+  simple-server:
+    image: ava-docker-local.esisoj70.emea.nsn-net.net/ava/edge/corba-e2e-tests-simple-server:0.2.0
+    networks:
+      - internal
+    volumes:
+      - ".ior-volume:/ior-volume"
+    environment:
+      - IOR_OUTPUT_FILE=server.ior
+  corba_perf:
+    build:
+      args:
+        "BASE_IMAGE_VERSION": "0.1.0"
+      context: ./
+    networks:
+      - internal
+    volumes:
+      - ".ior-volume:/ior-volume"
+    environment:
+      - CALL_COUNT=1
+      - METHOD_NAME=sendAlert
+      - METHOD_ARGS='test_message_qwertyuiopasdfghjklzxcvbnm1234567890_message_test_qwertyuiop_asdfghjkl_zxcvbnm_qazwsxedcrfvtgbyhnujmikolp_789456123_plokmijnuhbygvtfcrdxeszwaq_fnvrghedfkjvbewrifhidfer_rtgklvmorgnoencveif_4gfrojgrtogregrf;vrogvrfjevo'
+      - METHOD_TYPS=1
+      - ORB_ARGS=-ORBMaxMessageSize 64
+
+networks:
+  internal:
+    driver: bridge
